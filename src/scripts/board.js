@@ -15,12 +15,15 @@ const boardFactory = () => {
 
   const misses = [];
 
+  const ships = [];
+
   const getBoard = () => board;
 
   const getMisses = () => misses;
 
   const placeShip = (row, col, ship) => {
     board[row][col] = ship;
+    ships.push(ship);
   };
 
   const spotContainsShip = (row, col) => board[row][col] !== null;
@@ -35,13 +38,9 @@ const boardFactory = () => {
   };
 
   const areAllShipsSunk = () => {
-    for (let i = 0; i < board.length; i += 1) {
-      for (let j = 0; j < board[i].length; j += 1) {
-        if (spotContainsShip(i, j)) {
-          const ship = board[i][j];
-          if (!ship.isSunk()) return false;
-        }
-      }
+    for (let i = 0; i < ships.length; i += 1) {
+      const ship = ships[i];
+      if (!ship.isSunk()) return false;
     }
     return true;
   };

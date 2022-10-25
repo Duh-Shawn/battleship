@@ -13,11 +13,13 @@ const boardFactory = () => {
     [null, null, null, null, null, null, null, null, null, null],
   ];
 
+  const hits = [];
+
   const misses = [];
 
   const ships = [];
 
-  const getBoard = () => board;
+  const getHits = () => hits;
 
   const getMisses = () => misses;
 
@@ -32,6 +34,7 @@ const boardFactory = () => {
     if (spotContainsShip(row, col)) {
       const ship = board[row][col];
       ship.hit();
+      hits.push({ row, col });
     } else {
       misses.push({ row, col });
     }
@@ -45,7 +48,7 @@ const boardFactory = () => {
     return true;
   };
 
-  return { getBoard, placeShip, receiveAttack, getMisses, areAllShipsSunk };
+  return { placeShip, receiveAttack, getHits, getMisses, areAllShipsSunk };
 };
 
 export default boardFactory;

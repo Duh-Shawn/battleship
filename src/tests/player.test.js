@@ -1,5 +1,5 @@
-import playerFactory from "./player";
-import boardFactory from "./board";
+import playerFactory from "../scripts/player";
+import boardFactory from "../scripts/board";
 
 test("get player's name", () => {
     const gameBoard = boardFactory();

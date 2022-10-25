@@ -19,7 +19,7 @@
     "format": "prettier -w .",
     "start": "echo \"node_modules\" >> .gitignore; mkdir -p ./src/scripts; touch ./src/style.css; touch ./src/scripts/app.js; touch ./src/index.html; webpack ",
     "test": "jest",
-    "watch": "jest --watch ./src/scripts/*.js"
+    "watch": "jest --watch ./src/tests/*.js"
   },
   "dependencies": {
     "date-fns-tz": "^1.3.7",

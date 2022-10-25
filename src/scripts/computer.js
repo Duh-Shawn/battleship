@@ -11,7 +11,7 @@ const computerFactory = (name, gameBoard) => {
     return Math.floor(Math.random() * (maxVal - minVal + 1) + minVal); // The maximum is inclusive and the minimum is inclusive};
   };
 
-  newComputer.selectCoords = () => {
+  newComputer.randomCoords = () => {
     const row = newComputer.getRandomIntInclusive(0, 9);
     const col = newComputer.getRandomIntInclusive(0, 9);
     return { row, col };
@@ -29,6 +29,22 @@ const computerFactory = (name, gameBoard) => {
   newComputer.recordAttack = (coords) => newComputer.attackList.push(coords);
 
   newComputer.getAttackList = () => newComputer.attackList;
+
+  newComputer.getNewAttackCoords = () => {
+    let uniqueCoords = false;
+    let coords = null;
+    while (!uniqueCoords) {
+      // pick some random coords
+      coords = newComputer.randomCoords();
+      // Only uses these coords if they have not been selected before
+      if (newComputer.hasAttackedCoords(coords)) {
+        uniqueCoords = false;
+      } else {
+        uniqueCoords = true;
+      }
+    }
+    return coords;
+  };
 
   return Object.freeze(newComputer);
 };

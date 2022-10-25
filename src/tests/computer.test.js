@@ -1,4 +1,4 @@
-import computerFactory from "./computer";
+import computerFactory from "../scripts/computer";
 
 test("inherits from player", () => {
   const computer = computerFactory("Computer", null);
@@ -7,11 +7,38 @@ test("inherits from player", () => {
 
 test("computer selects random coords", () => {
   const computer = computerFactory("Computer", null);
-  const coords = computer.selectCoords();
+  const coords = computer.getNewAttackCoords();
   expect(coords.row).toBeGreaterThanOrEqual(0);
   expect(coords.row).toBeLessThanOrEqual(9);
   expect(coords.col).toBeGreaterThanOrEqual(0);
   expect(coords.col).toBeLessThanOrEqual(9);
+});
+
+test("computer selects unused coords", () => {
+  const computer = computerFactory("Computer", null);
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      if (i === 9 && j === 9) break;
+      computer.recordAttack({ row: i, col: j });
+    }
+  }
+  const coords = computer.getNewAttackCoords();
+  expect(coords.row).toBe(9);
+  expect(coords.col).toBe(9);
+});
+
+test("computer selects unused coords 2", () => {
+  const computer = computerFactory("Computer", null);
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      if (!(i === 5 && j === 2)) {
+        computer.recordAttack({ row: i, col: j });
+      }
+    }
+  }
+  const coords = computer.getNewAttackCoords();
+  expect(coords.row).toBe(5);
+  expect(coords.col).toBe(2);
 });
 
 test("coords recorded", () => {

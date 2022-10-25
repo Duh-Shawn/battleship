@@ -1,4 +1,4 @@
-import shipFactory from "./ship";
+import shipFactory from "../scripts/ship";
 
 test("has been hit", () => {
   const ship = shipFactory(4);

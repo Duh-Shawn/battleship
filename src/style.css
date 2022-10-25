@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+}
+
+body{
+    height: 100vh;
+}
+
+.wrapper{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-boards{
+    display: flex;
+    gap: 250px;
+}
+
+.friendly-board,
+.enemy-board{
+    border: 1px solid;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+}
+
+.box{
+    height: 50px;
+    width: 50px;
+    border: solid;
+}

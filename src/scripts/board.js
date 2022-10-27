@@ -23,24 +23,28 @@ const boardFactory = () => {
 
   const getMisses = () => misses;
 
-  const placeShip = (row, col, ship) => {
-    board[row][col] = ship;
+  const placeShip = (coords, ship) => {
+    board[coords.row][coords.col] = ship;
     ships.push(ship);
   };
 
-  const spotContainsShip = (row, col) => board[row][col] !== null;
+  const spotContainsShip = (coords) => board[coords.row][coords.col] !== null;
 
-  const receiveAttack = (row, col) => {
-    if (spotContainsShip(row, col)) {
-      const ship = board[row][col];
+  const receiveAttack = (coords) => {
+    if (spotContainsShip(coords)) {
+      const ship = board[coords.row][coords.col];
       ship.hit();
-      hits.push({ row, col });
+      hits.push(coords);
     } else {
-      misses.push({ row, col });
+      misses.push(coords);
     }
   };
 
   const areAllShipsSunk = () => {
+    // check if ships array is empty
+    if (ships.length === 0) {
+      throw new Error("There are no ships on the gameboard!");
+    }
     for (let i = 0; i < ships.length; i += 1) {
       const ship = ships[i];
       if (!ship.isSunk()) return false;

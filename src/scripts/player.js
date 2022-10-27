@@ -1,4 +1,4 @@
-const playerFactory = (name, gameBoard) => {
+const playerFactory = (name = "Player", gameBoard = null) => {
   const getName = () => name;
 
   const getBoard = () => gameBoard;

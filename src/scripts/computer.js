@@ -1,7 +1,7 @@
 import playerFactory from "./player";
 
-const computerFactory = (name, gameBoard) => {
-  let newComputer = Object.create(playerFactory(name, gameBoard));
+const computerFactory = (name = "Computer", gameBoard = null) => {
+  const newComputer = Object.create(playerFactory(name, gameBoard));
 
   newComputer.attackList = [];
 
@@ -19,11 +19,10 @@ const computerFactory = (name, gameBoard) => {
 
   newComputer.hasAttackedCoords = (coords) => {
     if (newComputer.attackList.find((e) => e.row === coords.row && e.col === coords.col)) {
-      // coords have been found in attack list
-      return true;
+      return true; // coords have been found in attack list
     }
-    // coords are unique
-    return false;
+
+    return false; // coords are unique
   };
 
   newComputer.recordAttack = (coords) => newComputer.attackList.push(coords);
@@ -34,8 +33,7 @@ const computerFactory = (name, gameBoard) => {
     let uniqueCoords = false;
     let coords = null;
     while (!uniqueCoords) {
-      // pick some random coords
-      coords = newComputer.randomCoords();
+      coords = newComputer.randomCoords(); // pick some random coords
       // Only uses these coords if they have not been selected before
       if (newComputer.hasAttackedCoords(coords)) {
         uniqueCoords = false;

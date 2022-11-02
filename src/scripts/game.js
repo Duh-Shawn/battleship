@@ -1,4 +1,52 @@
 const gameFactory = (player, computer) => {
+  const placePlayerShip = (startingCoords, orientation, ship) => {
+    const tmpRow = startingCoords.row;
+    const tmpCol = startingCoords.col;
+    const shipSize = ship.getLength();
+    // horizontal ship placement
+    if (orientation === 0) {
+      if (tmpCol + ship.getLength() - 1 > 9) {
+        throw new Error("Ship placement exceeds the allocated board space");
+      }
+      for (let i = tmpCol; i < tmpCol + shipSize; i += 1) {
+        player.getBoard().placeShip({ row: tmpRow, col: i }, ship);
+      }
+    }
+    // vertical ship placement
+    else {
+      if (tmpRow + ship.getLength() - 1 > 9) {
+        throw new Error("Ship placement exceeds the allocated board space");
+      }
+      for (let i = tmpRow; i < tmpRow + shipSize; i += 1) {
+        player.getBoard().placeShip({ row: i, col: tmpCol }, ship);
+      }
+    }
+  };
+
+  const placeComputerShip = (startingCoords, orientation, ship) => {
+    const tmpRow = startingCoords.row;
+    const tmpCol = startingCoords.col;
+    const shipSize = ship.getLength();
+    // horizontal ship placement
+    if (orientation === 0) {
+      if (tmpCol + ship.getLength() - 1 > 9) {
+        throw new Error("Ship placement exceeds the allocated board space");
+      }
+      for (let i = tmpCol; i < tmpCol + shipSize; i += 1) {
+        computer.getBoard().placeShip({ row: tmpRow, col: i }, ship);
+      }
+    }
+    // vertical ship placement
+    else {
+      if (tmpRow + ship.getLength() - 1 > 9) {
+        throw new Error("Ship placement exceeds the allocated board space");
+      }
+      for (let i = tmpRow; i < tmpRow + shipSize; i += 1) {
+        computer.getBoard().placeShip({ row: i, col: tmpCol }, ship);
+      }
+    }
+  };
+
   const playTurn = (coords) => {
     computer.getBoard().receiveAttack(coords);
   };
@@ -19,7 +67,9 @@ const gameFactory = (player, computer) => {
       return false;
     } catch (error) {
       if (error.message === "There are no ships on the gameboard!")
-        throw new Error("Unable to determine game status - a player is using an empty gameboard");
+        throw new Error(
+          "Unable to determine game status - a player is using an empty gameboard"
+        );
       else {
         return error;
       }
@@ -38,7 +88,14 @@ const gameFactory = (player, computer) => {
     return winner;
   };
 
-  return { playTurn, playComputerTurn, isGameOver, getWinner };
+  return {
+    playTurn,
+    playComputerTurn,
+    isGameOver,
+    getWinner,
+    placePlayerShip,
+    placeComputerShip,
+  };
 };
 
 export default gameFactory;

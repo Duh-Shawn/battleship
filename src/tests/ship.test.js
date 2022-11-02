@@ -14,3 +14,8 @@ test("has been sunk", () => {
   ship.hit();
   expect(ship.isSunk()).toBeTruthy();
 });
+
+test("get ship length", () => {
+  const ship = shipFactory(4);
+  expect(ship.getLength()).toBe(4);
+});

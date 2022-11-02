@@ -1,23 +1,70 @@
 const friendlyBoard = document.querySelector(".friendly-board");
 const enemyBoard = document.querySelector(".enemy-board");
+const setupBoard = document.querySelector(".friendly-board-setup");
 const symbolForMiss = "X";
 const symbolForHit = "*";
 
-const initGameBoards = (size) => {
-  // create game boards with a size x size configuartion
-  // example: input of 10 will create a 100 box board in a 10 x 10 configuration
+const hideGameBoards = () => {
+  document.querySelector(".game-boards").style.display = "none";
+};
+
+const selectBox = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  selectedBox.classList.add("selected-box");
+};
+
+const highlightBox = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  selectedBox.classList.add("highlighted-box");
+};
+
+const removeBoxHighlight = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  selectedBox.classList.remove("highlighted-box");
+};
+
+const showOutOfBounds = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  selectedBox.classList.add("out-of-bounds");
+};
+
+const removeOutOfBounds = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  selectedBox.classList.remove("out-of-bounds");
+};
+
+const addBoxesToBoard = (size, board) => {
   for (let i = 0; i < size; i += 1) {
     for (let j = 0; j < size; j += 1) {
       const box = document.createElement("div");
       box.classList = "box";
       box.dataset.row = i;
       box.dataset.col = j;
-      const box2 = box.cloneNode(true); // create a clone so we can init blocks to friendlyBoard and enemyBoard at the same time
 
-      friendlyBoard.appendChild(box);
-      enemyBoard.appendChild(box2);
+      board.appendChild(box);
     }
   }
+};
+
+const displaySetupBoard = (size = 10) => {
+  addBoxesToBoard(size, setupBoard);
+};
+
+const initGameBoards = (size = 10) => {
+  // create game boards with a size x size configuartion
+  // example: input of 10 will create a 100 box board in a 10 x 10 configuration
+  addBoxesToBoard(size, friendlyBoard);
+  addBoxesToBoard(size, enemyBoard);
 };
 
 const renderMisses = (arry, domBoard) => {
@@ -44,4 +91,15 @@ const renderEnemyBoard = (board) => {
   renderHits(board.getHits(), enemyBoard);
 };
 
-export { initGameBoards, renderFriendlyBoard, renderEnemyBoard };
+export {
+  displaySetupBoard,
+  initGameBoards,
+  renderFriendlyBoard,
+  renderEnemyBoard,
+  hideGameBoards,
+  selectBox,
+  highlightBox,
+  removeBoxHighlight,
+  removeOutOfBounds,
+  showOutOfBounds,
+};

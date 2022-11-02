@@ -18,7 +18,11 @@ const computerFactory = (name = "Computer", gameBoard = null) => {
   };
 
   newComputer.hasAttackedCoords = (coords) => {
-    if (newComputer.attackList.find((e) => e.row === coords.row && e.col === coords.col)) {
+    if (
+      newComputer.attackList.find(
+        (e) => e.row === coords.row && e.col === coords.col
+      )
+    ) {
       return true; // coords have been found in attack list
     }
 

@@ -8,6 +8,13 @@ const hideGameBoards = () => {
   document.querySelector(".game-boards").style.display = "none";
 };
 
+const boxIsAlreadySelected = (coords) => {
+  const selectedBox = setupBoard.querySelector(
+    `[data-row='${coords.row}'][data-col='${coords.col}']`
+  );
+  return selectedBox.classList.contains("selected-box");
+};
+
 const selectBox = (coords) => {
   const selectedBox = setupBoard.querySelector(
     `[data-row='${coords.row}'][data-col='${coords.col}']`
@@ -97,6 +104,7 @@ export {
   renderFriendlyBoard,
   renderEnemyBoard,
   hideGameBoards,
+  boxIsAlreadySelected,
   selectBox,
   highlightBox,
   removeBoxHighlight,

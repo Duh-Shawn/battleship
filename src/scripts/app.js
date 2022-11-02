@@ -6,6 +6,7 @@ import gameFactory from "./game";
 import * as DOM from "./dom";
 import getRules from "./rules";
 
+const toggleOrientationButton = document.getElementById("toggle-orientation");
 const setupBoard = document.querySelector(".friendly-board-setup");
 const friendlyBoard = document.querySelector(".friendly-board");
 const enemyBoard = document.querySelector(".enemy-board");
@@ -13,11 +14,9 @@ const enemyBoard = document.querySelector(".enemy-board");
 const player = playerFactory("Player", boardFactory());
 const computer = computerFactory("Computer", boardFactory());
 const game = gameFactory(player, computer);
-
-const orientation = 0; // 0 is for horizontal, 1 is for vertical
-
 const startingShipCount = getRules().ships.length;
 let countShipsPlaced = 0;
+let orientation = 0; // 0 is for horizontal, 1 is for vertical
 
 const isInBoundsHorizontally = (coords) => {
   const shipLength = getRules().ships[countShipsPlaced].length;
@@ -43,88 +42,77 @@ const isInBoundsVertically = (coords) => {
   );
 };
 
-const addHorizontalHighlighting = (event) => {
+const addHighlighting = (event) => {
   if (countShipsPlaced !== startingShipCount) {
     if (event.target.classList.contains("box")) {
-      const tmpRow = Number(event.target.dataset.row);
-      const tmpCol = Number(event.target.dataset.col);
-      const shipLength = getRules().ships[countShipsPlaced].length;
-      if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol })) {
-        for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
-          DOM.highlightBox({ row: tmpRow, col: i });
+      if (orientation === 0) {
+        const tmpRow = Number(event.target.dataset.row);
+        const tmpCol = Number(event.target.dataset.col);
+        const shipLength = getRules().ships[countShipsPlaced].length;
+        if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol })) {
+          for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
+            DOM.highlightBox({ row: tmpRow, col: i });
+          }
+        } else {
+          for (let i = tmpCol; i < 10; i += 1) {
+            DOM.showOutOfBounds({ row: tmpRow, col: i });
+          }
         }
       } else {
-        for (let i = tmpCol; i < 10; i += 1) {
-          DOM.showOutOfBounds({ row: tmpRow, col: i });
+        const tmpRow = Number(event.target.dataset.row);
+        const tmpCol = Number(event.target.dataset.col);
+        const shipLength = getRules().ships[countShipsPlaced].length;
+        if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
+          for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
+            DOM.highlightBox({ row: i, col: tmpCol });
+          }
+        } else {
+          for (let i = tmpRow; i < 10; i += 1) {
+            DOM.showOutOfBounds({ row: i, col: tmpCol });
+          }
         }
       }
     }
   }
 };
 
-const removeHorizontalHighlighting = (event) => {
+const removeHighlighting = (event) => {
   if (countShipsPlaced !== startingShipCount) {
     if (event.target.classList.contains("box")) {
-      const tmpRow = Number(event.target.dataset.row);
-      const tmpCol = Number(event.target.dataset.col);
-      const shipLength = getRules().ships[countShipsPlaced].length;
-      if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol }, shipLength)) {
-        for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
-          DOM.removeBoxHighlight({ row: tmpRow, col: i });
+      if (orientation === 0) {
+        const tmpRow = Number(event.target.dataset.row);
+        const tmpCol = Number(event.target.dataset.col);
+        const shipLength = getRules().ships[countShipsPlaced].length;
+        if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol }, shipLength)) {
+          for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
+            DOM.removeBoxHighlight({ row: tmpRow, col: i });
+          }
+        } else {
+          for (let i = tmpCol; i < 10; i += 1) {
+            DOM.removeOutOfBounds({ row: tmpRow, col: i });
+          }
         }
       } else {
-        for (let i = tmpCol; i < 10; i += 1) {
-          DOM.removeOutOfBounds({ row: tmpRow, col: i });
+        const tmpRow = Number(event.target.dataset.row);
+        const tmpCol = Number(event.target.dataset.col);
+        const shipLength = getRules().ships[countShipsPlaced].length;
+        if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
+          for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
+            DOM.removeBoxHighlight({ row: i, col: tmpCol });
+          }
+        } else {
+          for (let i = tmpRow; i < 10; i += 1) {
+            DOM.removeOutOfBounds({ row: i, col: tmpCol });
+          }
         }
       }
     }
   }
 };
 
-const addVerticalHighlighting = (event) => {
-  if (countShipsPlaced !== startingShipCount) {
-    if (event.target.classList.contains("box")) {
-      const tmpRow = Number(event.target.dataset.row);
-      const tmpCol = Number(event.target.dataset.col);
-      const shipLength = getRules().ships[countShipsPlaced].length;
-      if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
-        for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
-          DOM.highlightBox({ row: i, col: tmpCol });
-        }
-      } else {
-        for (let i = tmpRow; i < 10; i += 1) {
-          DOM.showOutOfBounds({ row: i, col: tmpCol });
-        }
-      }
-    }
-  }
-};
-
-const removeVerticalHighlighting = (event) => {
-  if (countShipsPlaced !== startingShipCount) {
-    const tmpRow = Number(event.target.dataset.row);
-    const tmpCol = Number(event.target.dataset.col);
-    const shipLength = getRules().ships[countShipsPlaced].length;
-    if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
-      for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
-        DOM.removeBoxHighlight({ row: i, col: tmpCol });
-      }
-    } else {
-      for (let i = tmpRow; i < 10; i += 1) {
-        DOM.removeOutOfBounds({ row: i, col: tmpCol });
-      }
-    }
-  }
-};
-
-const initHorizontalHighlighting = () => {
-  setupBoard.addEventListener("mouseover", addHorizontalHighlighting);
-  setupBoard.addEventListener("mouseout", removeHorizontalHighlighting);
-};
-
-const initVerticalHighlighting = (shipSize) => {
-  setupBoard.addEventListener("mouseover", addVerticalHighlighting);
-  setupBoard.addEventListener("mouseout", removeVerticalHighlighting);
+const initHighlighting = () => {
+  setupBoard.addEventListener("mouseover", addHighlighting);
+  setupBoard.addEventListener("mouseout", removeHighlighting);
 };
 
 const startGame = () => {
@@ -161,14 +149,7 @@ const setup = () => {
   // BEGIN SETUP
   DOM.hideGameBoards();
   DOM.displaySetupBoard(10);
-  // horizontal orientation has been selected
-  if (orientation === 0) {
-    initHorizontalHighlighting();
-  }
-  // vertical placement has been selected
-  else {
-    initVerticalHighlighting();
-  }
+  initHighlighting();
 
   const handleSetupBoardPlaceShip = (event) => {
     if (countShipsPlaced !== startingShipCount) {
@@ -191,11 +172,6 @@ const setup = () => {
               shipFactory(shipLength)
             );
             countShipsPlaced += 1;
-            console.log("valid placement");
-          }
-          // selected coords are out of bounds
-          else {
-            console.log("invalid placement");
           }
         }
         // vertical orientation has been selected
@@ -219,7 +195,22 @@ const setup = () => {
       // startGame();
     }
   };
+
+  const handleOrientationToggle = (event) => {
+    const orientationButton = event.target;
+    if (orientationButton.textContent === "Horizontal") {
+      orientationButton.textContent = "Vertical";
+      orientation = 1;
+      initHighlighting();
+    } else {
+      orientationButton.textContent = "Horizontal";
+      orientation = 0;
+      initHighlighting();
+    }
+  };
+
   setupBoard.addEventListener("click", handleSetupBoardPlaceShip);
+  toggleOrientationButton.addEventListener("click", handleOrientationToggle);
 };
 
 setup();

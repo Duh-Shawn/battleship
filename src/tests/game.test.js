@@ -4,22 +4,60 @@ import boardFactory from "../scripts/board";
 import computerFactory from "../scripts/computer";
 import shipFactory from "../scripts/ship";
 
+test("attempting to computer ship outside board range - horizontally", () => {
+  const player = playerFactory("Player", boardFactory());
+  const computer = computerFactory("Computer", boardFactory());
+  const ship = shipFactory(5);
+  const game = gameFactory(player, computer);
+  const orientation = 0; // horizontal placement
+  expect(() =>
+    game.placeComputerShip({ row: 1, col: 6 }, orientation, ship)
+  ).toThrow("Ship placement exceeds the allocated board space");
+});
+
+test("attempting to place computer ship outside board range - vertically", () => {
+  const player = playerFactory("Player", boardFactory());
+  const computer = computerFactory("Computer", boardFactory());
+  const ship = shipFactory(5);
+  const game = gameFactory(player, computer);
+  const orientation = 1; // horizontal placement
+  expect(() =>
+    game.placeComputerShip({ row: 6, col: 6 }, orientation, ship)
+  ).toThrow("Ship placement exceeds the allocated board space");
+});
+
+test("placing computer ship through game start - ship has a hit", () => {
+  const player = playerFactory("Player", boardFactory());
+  const computer = computerFactory("Computer", boardFactory());
+  const ship = shipFactory(5);
+  const game = gameFactory(player, computer);
+  const orientation = 0; // horizontal placement
+  game.placeComputerShip({ row: 1, col: 1 }, orientation, ship);
+  const computerBoard = computer.getBoard();
+  computerBoard.receiveAttack({ row: 1, col: 1 });
+  expect(ship.getHits()).toBe(1);
+});
+
 test("attempting to place ship outside board range - horizontally", () => {
   const player = playerFactory("Player", boardFactory());
   const computer = computerFactory("Computer", boardFactory());
   const ship = shipFactory(5);
   const game = gameFactory(player, computer);
   const orientation = 0; // horizontal placement
-  expect(() => game.placePlayerShip({ row: 1, col: 6 }, orientation, ship)).toThrow("Ship placement exceeds the allocated board space");
+  expect(() =>
+    game.placePlayerShip({ row: 1, col: 6 }, orientation, ship)
+  ).toThrow("Ship placement exceeds the allocated board space");
 });
 
-test("attempting to place ship outside board range - vertically", () => {
+test("attempting to place player ship outside board range - vertically", () => {
   const player = playerFactory("Player", boardFactory());
   const computer = computerFactory("Computer", boardFactory());
   const ship = shipFactory(5);
   const game = gameFactory(player, computer);
   const orientation = 1; // horizontal placement
-  expect(() => game.placePlayerShip({ row: 6, col: 6 }, orientation, ship)).toThrow("Ship placement exceeds the allocated board space");
+  expect(() =>
+    game.placePlayerShip({ row: 6, col: 6 }, orientation, ship)
+  ).toThrow("Ship placement exceeds the allocated board space");
 });
 
 test("placing player ships through game start - ship has a hit", () => {
@@ -38,7 +76,9 @@ test("game is not over - a player's board is empty", () => {
   const player = playerFactory("Player", boardFactory());
   const computer = computerFactory("Computer", boardFactory());
   const game = gameFactory(player, computer);
-  expect(() => game.isGameOver()).toThrow("Unable to determine game status - a player is using an empty gameboard");
+  expect(() => game.isGameOver()).toThrow(
+    "Unable to determine game status - a player is using an empty gameboard"
+  );
 });
 
 test("game is not over - in progress", () => {

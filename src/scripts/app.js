@@ -6,150 +6,23 @@ import gameFactory from "./game";
 import * as DOM from "./dom";
 import getRules from "./rules";
 
-const toggleOrientationButton = document.getElementById("toggle-orientation");
 const setupBoard = document.querySelector(".friendly-board-setup");
-const friendlyBoard = document.querySelector(".friendly-board");
-const enemyBoard = document.querySelector(".enemy-board");
 
 const player = playerFactory("Player", boardFactory());
 const computer = computerFactory("Computer", boardFactory());
 const game = gameFactory(player, computer);
 const startingShipCount = getRules().ships.length;
 let countShipsPlaced = 0;
-let orientation = 0; // 0 is for horizontal, 1 is for vertical
-
-const hasShipAlreadyBeenPlacedInPath = (startingCoords) => {
-  // horizontal ship placement
-  const tmpRow = startingCoords.row;
-  const tmpCol = startingCoords.col;
-  const shipLength = getRules().ships[countShipsPlaced].length;
-  if (orientation === 0) {
-    for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
-      if (DOM.boxIsAlreadySelected({ row: tmpRow, col: i })) {
-        return true;
-      }
-    }
-  }
-  // vertical ship placement
-  else {
-    for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
-      if (DOM.boxIsAlreadySelected({ row: i, col: tmpCol })) {
-        return true;
-      }
-    }
-  }
-  return false;
-};
-
-const isInBoundsHorizontally = (coords) => {
-  const shipLength = getRules().ships[countShipsPlaced].length;
-  return (
-    document
-      .querySelector(".friendly-board-setup")
-      .querySelector(
-        `[data-row='${coords.row}'][data-col='${
-          coords.col + (shipLength - 1)
-        }']`
-      ) !== null
-  );
-};
-
-const isInBoundsVertically = (coords) => {
-  const shipLength = getRules().ships[countShipsPlaced].length;
-  return (
-    document
-      .querySelector(".friendly-board-setup")
-      .querySelector(
-        `[data-row='${coords.row + shipLength - 1}'][data-col='${coords.col}']`
-      ) !== null
-  );
-};
-
-const addHighlighting = (event) => {
-  if (countShipsPlaced !== startingShipCount) {
-    if (event.target.classList.contains("box")) {
-      const tmpRow = Number(event.target.dataset.row);
-      const tmpCol = Number(event.target.dataset.col);
-      const shipLength = getRules().ships[countShipsPlaced].length;
-      if (orientation === 0) {
-        if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol })) {
-          for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
-            if (DOM.boxIsAlreadySelected({ row: tmpRow, col: i })) {
-              DOM.showOutOfBounds({ row: tmpRow, col: i });
-            } else {
-              DOM.highlightBox({ row: tmpRow, col: i });
-            }
-          }
-        } else {
-          for (let i = tmpCol; i < 10; i += 1) {
-            DOM.showOutOfBounds({ row: tmpRow, col: i });
-          }
-        }
-      }
-      // vertical orientation has been selected
-      else if (orientation === 1) {
-        if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
-          for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
-            if (DOM.boxIsAlreadySelected({ row: i, col: tmpCol })) {
-              DOM.showOutOfBounds({ row: i, col: tmpCol });
-            } else {
-              DOM.highlightBox({ row: i, col: tmpCol });
-            }
-          }
-        } else {
-          for (let i = tmpRow; i < 10; i += 1) {
-            DOM.showOutOfBounds({ row: i, col: tmpCol });
-          }
-        }
-      }
-    }
-  }
-};
-
-const removeHighlighting = (event) => {
-  if (countShipsPlaced !== startingShipCount) {
-    if (event.target.classList.contains("box")) {
-      const tmpRow = Number(event.target.dataset.row);
-      const tmpCol = Number(event.target.dataset.col);
-      const shipLength = getRules().ships[countShipsPlaced].length;
-      if (orientation === 0) {
-        if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol }, shipLength)) {
-          for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
-            DOM.removeBoxHighlight({ row: tmpRow, col: i });
-            DOM.removeOutOfBounds({ row: tmpRow, col: i });
-          }
-        } else {
-          for (let i = tmpCol; i < 10; i += 1) {
-            DOM.removeOutOfBounds({ row: tmpRow, col: i });
-          }
-        }
-      }
-      // vertical orientation has been selected
-      else if (orientation === 1) {
-        if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
-          for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
-            DOM.removeBoxHighlight({ row: i, col: tmpCol });
-            DOM.removeOutOfBounds({ row: i, col: tmpCol });
-          }
-        } else {
-          for (let i = tmpRow; i < 10; i += 1) {
-            DOM.removeOutOfBounds({ row: i, col: tmpCol });
-          }
-        }
-      }
-    }
-  }
-};
-
-const initHighlighting = () => {
-  setupBoard.addEventListener("mouseover", addHighlighting);
-  setupBoard.addEventListener("mouseout", removeHighlighting);
-};
 
 const startGame = () => {
   DOM.initGameBoards(10); // setup the boards with blocks in 10 x 10 configuration
   DOM.renderFriendlyBoard(player.getBoard());
   DOM.renderEnemyBoard(computer.getBoard());
+  const toggleOrientationButton = document.getElementById("toggle-orientation");
+  const orientation =
+    toggleOrientationButton.textContent === "Horizontal" ? 0 : 1; // 0 is for horizontal, 1 is for vertical
+  game.placeComputerShip({ row: 1, col: 1 }, orientation, shipFactory(5));
+  const enemyBoard = document.querySelector(".enemy-board");
   enemyBoard.addEventListener("click", (event) => {
     if (!game.isGameOver()) {
       // check that a box has been clicked
@@ -180,7 +53,7 @@ const setup = () => {
   // BEGIN SETUP
   DOM.hideGameBoards();
   DOM.displaySetupBoard(10);
-  initHighlighting();
+  DOM.initHighlighting();
 
   const handleSetupBoardPlaceShip = (event) => {
     if (countShipsPlaced !== startingShipCount) {
@@ -189,11 +62,17 @@ const setup = () => {
         const tmpRow = Number(event.target.dataset.row);
         const tmpCol = Number(event.target.dataset.col);
         const shipLength = getRules().ships[countShipsPlaced].length;
+        const toggleOrientationButton =
+          document.getElementById("toggle-orientation");
+        const orientation =
+          toggleOrientationButton.textContent === "Horizontal" ? 0 : 1; // 0 is for horizontal, 1 is for vertical
         // horizontal orientation has been selected
         if (orientation === 0) {
           // selected coords are in bounds
-          if (isInBoundsHorizontally({ row: tmpRow, col: tmpCol })) {
-            if (!hasShipAlreadyBeenPlacedInPath({ row: tmpRow, col: tmpCol })) {
+          if (DOM.isInBoundsHorizontally({ row: tmpRow, col: tmpCol })) {
+            if (
+              !DOM.hasShipAlreadyBeenPlacedInPath({ row: tmpRow, col: tmpCol })
+            ) {
               for (let i = tmpCol; i < tmpCol + shipLength; i += 1) {
                 DOM.selectBox({ row: tmpRow, col: i });
               }
@@ -203,15 +82,18 @@ const setup = () => {
                 shipFactory(shipLength)
               );
               countShipsPlaced += 1;
-            } else {
-              console.log("Ship has already been placed in line");
+              DOM.incrementShipCount();
             }
           }
         }
         // vertical orientation has been selected
         else if (orientation === 1) {
-          if (isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)) {
-            if (!hasShipAlreadyBeenPlacedInPath({ row: tmpRow, col: tmpCol })) {
+          if (
+            DOM.isInBoundsVertically({ row: tmpRow, col: tmpCol }, shipLength)
+          ) {
+            if (
+              !DOM.hasShipAlreadyBeenPlacedInPath({ row: tmpRow, col: tmpCol })
+            ) {
               for (let i = tmpRow; i < tmpRow + shipLength; i += 1) {
                 DOM.selectBox({ row: i, col: tmpCol });
               }
@@ -221,32 +103,19 @@ const setup = () => {
                 shipFactory(shipLength)
               );
               countShipsPlaced += 1;
-            } else {
-              console.log("Ship has already been placed in line");
+              DOM.incrementShipCount();
             }
           }
         }
       }
     } else {
-      // startGame();
-    }
-  };
-
-  const handleOrientationToggle = (event) => {
-    const orientationButton = event.target;
-    if (orientationButton.textContent === "Horizontal") {
-      orientationButton.textContent = "Vertical";
-      orientation = 1;
-      initHighlighting();
-    } else {
-      orientationButton.textContent = "Horizontal";
-      orientation = 0;
-      initHighlighting();
+      DOM.hideSetup();
+      DOM.showGameBoards();
+      startGame();
     }
   };
 
   setupBoard.addEventListener("click", handleSetupBoardPlaceShip);
-  toggleOrientationButton.addEventListener("click", handleOrientationToggle);
 };
 
 setup();

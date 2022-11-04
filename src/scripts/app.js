@@ -18,28 +18,31 @@ const startGame = () => {
   DOM.initGameBoards(10); // setup the boards with blocks in 10 x 10 configuration
   DOM.renderFriendlyBoard(player.getBoard());
   DOM.renderEnemyBoard(computer.getBoard());
-  const toggleOrientationButton = document.getElementById("toggle-orientation");
-  const orientation =
-    toggleOrientationButton.textContent === "Horizontal" ? 0 : 1; // 0 is for horizontal, 1 is for vertical
-  game.placeComputerShip({ row: 1, col: 1 }, orientation, shipFactory(5));
+  game.placeRandomComputerShips();
   const enemyBoard = document.querySelector(".enemy-board");
   enemyBoard.addEventListener("click", (event) => {
     if (!game.isGameOver()) {
       // check that a box has been clicked
       if (event.target.classList.contains("box")) {
         // box in the enemy board has been selected
-        if (event.target.parentNode.classList.contains("enemy-board")) {
+        if (
+          event.target.parentNode.classList.contains("enemy-board") &&
+          !event.target.classList.contains("hit-shot") &&
+          !event.target.classList.contains("missed-shot")
+        ) {
           // Player Turn
           const { row, col } = event.target.dataset; // grab row and col values from html data attribute
           game.playTurn({ row, col }); // play turn for human player
           DOM.renderEnemyBoard(computer.getBoard()); // render human player's attack on computers board
           if (game.isGameOver()) {
+            game.getWinner().getName();
             console.log(game.getWinner().getName());
           } else {
             // Allow Computer to take a turn
             game.playComputerTurn();
             DOM.renderFriendlyBoard(player.getBoard()); // render computer's attack on human player's board
             if (game.isGameOver()) {
+              game.getWinner().getName();
               console.log(game.getWinner().getName());
             }
           }

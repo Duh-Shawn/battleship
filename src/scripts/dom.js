@@ -194,7 +194,7 @@ const isInBoundsVertically = (coords) => {
 };
 
 const addHighlighting = (event) => {
-  console.log(Number(shipsPlaced.textContent));
+  Number(shipsPlaced.textContent);
   const countShipsPlaced = Number(shipsPlaced.textContent);
   if (countShipsPlaced !== startingShipCountRule) {
     if (event.target.classList.contains("box")) {

@@ -31,6 +31,7 @@ const gameFactory = (player, computer) => {
       .querySelector(".enemy-board")
       .querySelector(`[data-row='${coords.row}'][data-col='${coords.col}']`);
     selectedBox.classList.add("selected-box");
+    selectedBox.textContent += `Row:${coords.row} Col: ${coords.col}`;
   };
 
   const areComputerSelectedCoordsUnique = (

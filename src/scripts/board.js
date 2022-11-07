@@ -1,6 +1,6 @@
 // factory function for creating gameboards
 const boardFactory = (size = 10) => {
-  const board = [...Array(size)].map(() => Array(size).fill(null));
+  const board = [...Array(size)].map(() => Array(size).fill("empty"));
 
   const hits = [];
 
@@ -17,7 +17,8 @@ const boardFactory = (size = 10) => {
     ships.push(ship);
   };
 
-  const spotContainsShip = (coords) => board[coords.row][coords.col] !== null;
+  const spotContainsShip = (coords) =>
+    board[coords.row][coords.col] !== "empty";
 
   const receiveAttack = (coords) => {
     if (spotContainsShip(coords)) {

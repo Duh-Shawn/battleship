@@ -10,11 +10,23 @@ const startingShipCountDisplay = document.getElementById("starting-ships");
 const startingShipCountRule = getRules().ships.length;
 startingShipCountDisplay.textContent = startingShipCountRule;
 
+const winnerModal = document.querySelector(".modal");
+const winnerModalContent = document.querySelector(".modal-content .winner");
 const symbolForMiss = "X";
 const symbolForHit = "*";
+
 let friendlyBoard;
 let enemyBoard;
 let orientation = 0;
+
+const showWinnerModal = (name) => {
+  winnerModal.style.display = "flex";
+  winnerModalContent.textContent = `${name} WINS!`;
+};
+
+const hideWinnerModal = () => {
+  winnerModal.style.display = "none";
+};
 
 const incrementShipCount = () => {
   shipsPlaced.textContent = Number(shipsPlaced.textContent) + 1;
@@ -26,6 +38,15 @@ const showSetup = () => {
 
 const hideSetup = () => {
   setupDiv.style.display = "none";
+};
+
+const resetSetup = () => {
+  shipsPlaced.textContent = 0;
+  setupBoard.innerHTML = "";
+};
+
+const resetGameBoards = () => {
+  gameBoardsDiv.innerHTML = "";
 };
 
 const showGameBoards = () => {
@@ -96,25 +117,27 @@ const displaySetupBoard = (size = 10) => {
 };
 
 const createFriendlyBoard = () => {
-  friendlyBoard = setupBoard.cloneNode(true);
-  friendlyBoard.classList.remove("friendly-board-setup");
-  friendlyBoard.classList.add("friendly-board");
+  const tempFriendlyBoard = setupBoard.cloneNode(true);
+  tempFriendlyBoard.classList.remove("friendly-board-setup");
+  tempFriendlyBoard.classList.add("friendly-board");
+  return tempFriendlyBoard;
 };
 
 const createEnemyBoard = () => {
-  enemyBoard = document.createElement("div");
-  enemyBoard.classList.add("enemy-board");
-  enemyBoard.classList.add("board");
+  const tempEnemyBoard = document.createElement("div");
+  tempEnemyBoard.classList.add("enemy-board");
+  tempEnemyBoard.classList.add("board");
+  return tempEnemyBoard;
 };
 
 const initGameBoards = (size = 10) => {
   // create game boards with a size x size configuartion
   // example: input of 10 will create a 100 box board in a 10 x 10 configuration
-  createFriendlyBoard();
-  createEnemyBoard();
-  addBoxesToBoard(size, enemyBoard);
+  friendlyBoard = createFriendlyBoard();
+  enemyBoard = createEnemyBoard();
   gameBoardsDiv.appendChild(friendlyBoard);
   gameBoardsDiv.appendChild(enemyBoard);
+  addBoxesToBoard(size, enemyBoard);
 };
 
 const renderMisses = (arry, domBoard) => {
@@ -299,6 +322,7 @@ export {
   renderEnemyBoard,
   showSetup,
   hideSetup,
+  resetSetup,
   showGameBoards,
   hideGameBoards,
   boxIsAlreadySelected,
@@ -312,4 +336,7 @@ export {
   hasShipAlreadyBeenPlacedInPath,
   isInBoundsHorizontally,
   isInBoundsVertically,
+  showWinnerModal,
+  hideWinnerModal,
+  resetGameBoards,
 };

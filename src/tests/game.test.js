@@ -4,6 +4,31 @@ import boardFactory from "../scripts/board";
 import computerFactory from "../scripts/computer";
 import shipFactory from "../scripts/ship";
 
+test("test computer selected coords are NOT unique - vertically placed over horizontal piece", () => {
+  const player = playerFactory("Player", boardFactory());
+  const computer = computerFactory("Computer", boardFactory());
+  const ship = shipFactory(4);
+  const game = gameFactory(player, computer);
+  const array = [...Array(10)].map(() => Array(10).fill("empty"));
+  array[6][2] = ship;
+  array[6][3] = ship;
+  array[6][4] = ship;
+  array[6][5] = ship;
+  array[6][6] = ship;
+
+  const orientation = 1;
+  const coords = { row: 5, col: 4 };
+
+  expect(
+    game.areComputerSelectedCoordsUnique(
+      array,
+      coords,
+      orientation,
+      ship.getLength()
+    )
+  ).toBeFalsy();
+});
+
 test("test computer selected coords are NOT unique - vertically starting on existing line", () => {
   const player = playerFactory("Player", boardFactory());
   const computer = computerFactory("Computer", boardFactory());
@@ -20,7 +45,7 @@ test("test computer selected coords are NOT unique - vertically starting on exis
     game.areComputerSelectedCoordsUnique(
       array,
       coords,
-      1,
+      orientation,
       ship.getLength()
     )
   ).toBeFalsy();
@@ -42,7 +67,7 @@ test("test computer selected coords are NOT unique - vertically starting on exis
     game.areComputerSelectedCoordsUnique(
       array,
       coords,
-      1,
+      orientation,
       ship.getLength()
     )
   ).toBeFalsy();

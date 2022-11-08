@@ -100,8 +100,23 @@ const gameFactory = (player, computer) => {
     }
   };
 
+  const fillHistoryArray = (array, coords, orientation, ship) => {
+    const tmpArray = [...array];
+    const shipLength = ship.getLength();
+    if (orientation === 0) {
+      for (let i = coords.col; i < coords.col + shipLength; i += 1) {
+        tmpArray[coords.row][i] = ship;
+      }
+    } else {
+      for (let i = coords.row; i < coords.row + shipLength; i += 1) {
+        tmpArray[i][coords.col] = ship;
+      }
+    }
+    return tmpArray;
+  };
+
   const placeRandomComputerShips = (size = 10) => {
-    const selectedCoordsHistory = [...Array(size)].map(() =>
+    let selectedCoordsHistory = [...Array(size)].map(() =>
       Array(size).fill("empty")
     );
 
@@ -133,7 +148,12 @@ const gameFactory = (player, computer) => {
         }
       }
       placeComputerShip(coords, orientation, ship);
-      selectedCoordsHistory[coords.row][coords.col] = ship;
+      selectedCoordsHistory = fillHistoryArray(
+        selectedCoordsHistory,
+        coords,
+        orientation,
+        ship
+      );
     }
   };
 

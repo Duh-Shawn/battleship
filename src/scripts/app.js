@@ -37,7 +37,6 @@ const startGame = () => {
           if (game.isGameOver()) {
             const winner = game.getWinner();
             DOM.showWinnerModal(winner.getName());
-            console.log(winner.getName());
           } else {
             // Allow Computer to take a turn
             game.playComputerTurn();
@@ -45,7 +44,6 @@ const startGame = () => {
             if (game.isGameOver()) {
               const winner = game.getWinner();
               DOM.showWinnerModal(winner.getName());
-              console.log(winner.getName());
             }
           }
         }

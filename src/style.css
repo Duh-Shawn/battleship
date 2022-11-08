@@ -24,8 +24,17 @@ body {
   align-items: center;
 }
 
-.game-boards {
+#welcome-form{
+  margin-top: 25px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.game-boards {
+  display: none;
   gap: 250px;
   height: 50%;
   width: 50%;
@@ -61,6 +70,7 @@ body {
 }
 
 .setup {
+  display: none;
   text-align: center;
   height: 50%;
   width: 50%;

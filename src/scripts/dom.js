@@ -1,5 +1,7 @@
 import getRules from "./rules";
 
+const welcome = document.querySelector(".welcome");
+
 const setupBoard = document.querySelector(".friendly-board-setup");
 const setupDiv = document.querySelector(".setup");
 const gameBoardsDiv = document.querySelector(".game-boards");
@@ -18,6 +20,10 @@ const symbolForHit = "*";
 let friendlyBoard;
 let enemyBoard;
 let orientation = 0;
+
+const hideWelcome = () => {
+  welcome.style.display = "none";
+};
 
 const showWinnerModal = (name) => {
   winnerModal.style.display = "flex";
@@ -316,6 +322,7 @@ const handleOrientationToggle = (event) => {
 toggleOrientationButton.addEventListener("click", handleOrientationToggle);
 
 export {
+  hideWelcome,
   displaySetupBoard,
   initGameBoards,
   renderFriendlyBoard,

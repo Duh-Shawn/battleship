@@ -6,9 +6,11 @@ import gameFactory from "./game";
 import * as DOM from "./dom";
 import getRules from "./rules";
 
+const playGame = document.getElementById("play-game");
 const playAgain = document.querySelector(".play-again");
 const friendlyBoardSetup = document.querySelector(".friendly-board-setup");
 let player;
+let playerName;
 let computer;
 let game;
 let countShipsPlaced;
@@ -50,19 +52,6 @@ const startGame = () => {
       }
     }
   });
-};
-
-const setup = () => {
-  // BEGIN SETUP
-  DOM.hideGameBoards();
-  DOM.showSetup();
-  DOM.displaySetupBoard(10);
-  DOM.initHighlighting();
-  startingShipCount = getRules().ships.length;
-  countShipsPlaced = 0;
-  player = playerFactory("Player", boardFactory());
-  computer = computerFactory("Computer", boardFactory());
-  game = gameFactory(player, computer);
 };
 
 const handleSetupBoardPlaceShip = (event) => {
@@ -125,14 +114,32 @@ const handleSetupBoardPlaceShip = (event) => {
   }
 };
 
+const setup = (pName) => {
+  // BEGIN SETUP
+  DOM.hideWelcome();
+  DOM.hideGameBoards();
+  DOM.showSetup();
+  DOM.displaySetupBoard(10);
+  DOM.initHighlighting();
+  startingShipCount = getRules().ships.length;
+  countShipsPlaced = 0;
+  player = playerFactory(pName, boardFactory());
+  computer = computerFactory("Computer", boardFactory());
+  game = gameFactory(player, computer);
+};
+
 const handlePlayAgain = () => {
   DOM.hideWinnerModal();
   DOM.resetGameBoards();
   DOM.resetSetup();
-  setup();
+  setup(playerName);
+};
+
+const handleStartSetup = () => {
+  playerName = document.getElementById("name").value;
+  setup(playerName);
 };
 
 friendlyBoardSetup.addEventListener("click", handleSetupBoardPlaceShip);
 playAgain.addEventListener("click", handlePlayAgain);
-
-setup();
+playGame.addEventListener("click", handleStartSetup);

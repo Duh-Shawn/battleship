@@ -1,3 +1,4 @@
+import "../style.scss";
 import boardFactory from "./board";
 import playerFactory from "./player";
 import computerFactory from "./computer";

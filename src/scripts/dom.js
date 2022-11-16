@@ -14,8 +14,8 @@ startingShipCountDisplay.textContent = startingShipCountRule;
 
 const winnerModal = document.querySelector(".modal");
 const winnerModalContent = document.querySelector(".modal-content .winner");
-const symbolForMiss = "X";
-const symbolForHit = "*";
+const symbolForMiss = getRules().symbols.miss;
+const symbolForHit = getRules().symbols.hit;
 
 let friendlyBoard;
 let enemyBoard;
@@ -39,7 +39,7 @@ const incrementShipCount = () => {
 };
 
 const showSetup = () => {
-  setupDiv.style.display = "block";
+  setupDiv.style.display = "flex";
 };
 
 const hideSetup = () => {
@@ -149,7 +149,7 @@ const initGameBoards = (size = 10) => {
 const renderMisses = (arry, domBoard) => {
   arry.forEach((el) => {
     const box = domBoard.querySelectorAll(`[data-row='${el.row}']`)[el.col]; // associate the coord obj's row and col with the data-row and col values present on the dom
-    box.textContent = symbolForMiss;
+    box.innerHTML = symbolForMiss;
     box.classList.add("missed-shot");
   });
 };
@@ -157,7 +157,7 @@ const renderMisses = (arry, domBoard) => {
 const renderHits = (arry, domBoard) => {
   arry.forEach((el) => {
     const box = domBoard.querySelectorAll(`[data-row='${el.row}']`)[el.col]; // associate the coord obj's row and col with the data-row and col values present on the dom
-    box.textContent = symbolForHit;
+    box.innerHTML = symbolForHit;
     box.classList.add("hit-shot");
   });
 };

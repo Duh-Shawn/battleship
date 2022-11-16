@@ -9,6 +9,7 @@
   <script defer src="app.bundle.js"></script></head>
   <body>
     <div class="wrapper">
+      
       <div class="welcome">
         <h1>WELCOME TO BATTLESHIP</h1>
         <form id="welcome-form">
@@ -23,6 +24,7 @@
           <button type="button" id="play-game">Play Game</button>
         </form>
       </div>
+
       <div class="setup">
         <button id="toggle-orientation">Horizontal</button>
         <div class="friendly-board-setup board"></div>
@@ -33,13 +35,16 @@
           </p>
         </div>
       </div>
+
       <div class="game-boards"></div>
-    </div>
-    <div id="modal" class="modal">
-      <div class="modal-content">
-        <p class="winner"></p>
-        <button class="play-again">Play Again</button>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <p class="winner"></p>
+          <button class="play-again">Play Again</button>
+        </div>
       </div>
     </div>
+    
   </body>
 </html>

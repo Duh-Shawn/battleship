@@ -1,0 +1,131 @@
+$sea-color: rgba(135, 206, 250, 0.87);
+$hit-and-invalid-color: rgba(255, 0, 0, 0.589);
+$valid-color: rgba(0, 128, 0, 0.589);
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+  font-size: 25px;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  .welcome {
+    #welcome-form {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+  }
+
+  .setup {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    height: 50%;
+    width: 25%;
+    gap: 25px;
+  
+    .friendly-board-setup {
+      margin: auto;
+    }
+  }
+
+  .game-boards {
+    display: none;
+    gap: 250px;
+    height: 50%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    text-align: center;
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fefefe;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 25%; /* Could be more or less, depending on screen size */
+      height: 25%;
+
+      .winner {
+        margin-bottom: 25px;
+      }
+    }
+  }
+}
+
+.board {
+  border: 1px solid;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  height: 100%;
+  width: 100%;
+
+  
+}
+
+.box {
+  border: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $sea-color;
+}
+
+.highlighted-box,
+.selected-box {
+  background-color: $valid-color;
+}
+
+.out-of-bounds {
+  background-color: $hit-and-invalid-color;
+}
+
+.hit-shot {
+  background-color: $hit-and-invalid-color;
+}
+
+
+
+
